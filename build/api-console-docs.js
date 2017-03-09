@@ -25532,9 +25532,7 @@ Polymer({
     properties: {
       // RAML as the JSON produced by the parser. The `.specificvation` part of the output.
       raml: {
-        type: Object,
-        notify: true,
-        readOnly: true
+        type: Object
       },
 
       path: String,
