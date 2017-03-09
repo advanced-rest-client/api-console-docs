@@ -6,7 +6,7 @@ const rimraf = require('rimraf');
 const Vulcanize = require('vulcanize');
 // const runSequence = require('run-sequence');
 const fs = require('fs');
-// const crisper = require('crisper');
+const crisper = require('crisper');
 // const merge = require('merge-stream');
 
 class Builder {
@@ -65,10 +65,23 @@ class Builder {
         if (err) {
           return reject(err);
         }
-        let jsFile = 'api-console-build.html';
-        var targetHtml = path.join(this.buildDir, jsFile);
+        let jsFile = 'api-console-docs.js';
+        let htmlFile = 'api-console-docs.html';
+        let bundleFile = 'api-console-docs-bundle.html';
+        var targetHtml = path.join(this.buildDir, htmlFile);
+        var targetJs = path.join(this.buildDir, jsFile);
+        var targetBoundle  = path.join(this.buildDir, bundleFile);
 
-        fs.writeFileSync(targetHtml, inlinedHtml, 'utf-8');
+        let output = crisper({
+          source: inlinedHtml,
+          jsFileName: '', //jsFile
+          scriptInHead: false
+        });
+        // targetHtml = targetHtml.replace('<script src="api-console-docs.js"></script>', '');
+        fs.writeFileSync(targetHtml, output.html, 'utf-8');
+        fs.writeFileSync(targetJs, output.js, 'utf-8');
+        fs.writeFileSync(targetBoundle, inlinedHtml, 'utf-8');
+
         console.log('Saved in ', targetHtml);
         resolve();
       });

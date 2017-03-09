@@ -7,26 +7,32 @@ It does not contains the "try it" screen.
 
 ## Using the the element in the content script.
 
-1. Copy the file from `./build/` to your extension package:
+#### Copy source files from `./build/` to your extension package:
 
 ```
-cp ./build/api-console-build.html ../path-to-extension/api-console-docs.html
+cp ./build/api-console-docs.html ../path-to-extension/api-console-docs.html
+cp ./build/api-console-docs.js ../path-to-extension/api-console-docs.js
 ```
+
+This files are CSP ready. The `api-console-docs-bundle.html` file is cobining
+JavaScript and HTML content into single file.
+
 Note name change when copying. This name will be used in other code examples.
 
-2. List the file in the `manifest.json` file:
+#### List the file in the `manifest.json` file:
 
 ```
 {
   ...
   "web_accessible_resources": [
-    "api-console-docs.html"
+    "api-console-docs.html",
+    "api-console-docs.js"
   ],
   ...
 }
 ```
 
-3. In content script import the element:
+#### In content script import the element:
 
 ```
 var link = document.createElement('link');
@@ -35,7 +41,14 @@ link.href = chrome.extension.getURL('api-console-docs.html');
 document.head.appendChild(link)
 ```
 
-4. Append `api-console-docs` element to the document
+#### Append the script file.
+```
+var link = document.createElement('script');
+link.src = chrome.extension.getURL('api-console-docs.js');
+document.body.appendChild(link)
+```
+
+#### Append `api-console-docs` element to the document
 
 ```
 var docs = document.createElement('api-console-docs');
